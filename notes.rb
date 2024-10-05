@@ -1,13 +1,4 @@
 #!/usr/bin/env ruby
-require "bundler/inline"
-
-gemfile do
-  source 'https://rubygems.org'
-  gem "micromidi"
-end
-
-require "midi"
-
 class InvalidKeyError < StandardError; end
 class InvalidScaleError < StandardError; end
 class InvalidIntervalError < StandardError; end
@@ -180,5 +171,4 @@ if $PROGRAM_NAME == __FILE__
   p s.notes
   puts "---chords---"
   p s.chords(triads: true)
-
 end
