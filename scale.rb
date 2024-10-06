@@ -52,6 +52,23 @@ class Scale
     end
   end
 
+  def chord_formulas
+    [
+     {kind: :major, notes: [4,3]},
+     {kind: :minor, notes: [3,4]},
+     {kind: :augmented, notes: [4,4]},
+     {kind: :diminished, notes: [3,3]},
+     {kind: :diminished7, notes: [3,3,3]},
+     {kind: :half_diminished, notes: [3,3,4]},
+     {kind: :minor7, notes: [3,4,3]},
+     {kind: :minmajor7, notes: [3,4,4]},
+     {kind: :dominant7, notes: [4,3,3]},
+     {kind: :major7, notes: [4,3,4]},
+     {kind: :augmentedmajor7, notes: [4,4,3]}
+    ]
+  end
+
+
   def chords(*degrees, triads: false)
     degrees = begin 
       if degrees.empty?
@@ -70,21 +87,7 @@ class Scale
       end
     end
     
-    formulas = [
-        [4,3],
-        [3,4],
-        [4,4],
-        [3,3],
-        [3,3,3],#dim 7
-        [3,3,4],#h dim 7
-        [3,4,3],
-        [3,4,4],
-        [4,2,4],
-        [4,3,3],
-        [4,3,4],
-        [4,4,3]
-    ]
-    formulas.select!{_1.size == 2} if triads == true
+    formulas = chord_formulas.select{_1[:notes].size == 2} if triads == true
     degrees.map do |degree|
       ch = []
       i = degree-1
@@ -92,13 +95,13 @@ class Scale
         next unless self.notes[i]
         p = CHROMATIC_SCALE.index(self.notes[i])
         c = []
-        ff = f.dup
+        ff = f[:notes].dup
         until ff.empty?
           p += ff.shift
           c << CHROMATIC_SCALE[p]
         end
         if c.difference(self.notes).empty?
-          ch << [self.notes[i], *c]
+          ch << {kind: f[:kind], notes: [self.notes[i], *c]}
         end
       end
       ch

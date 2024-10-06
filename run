@@ -17,6 +17,11 @@ if $PROGRAM_NAME == __FILE__
   define_scale_from_example "SpanishPhrygian", %w(a a# c# d e f g)
   define_scale_from_example "Phrygian", %w(a a# c d e f g)
   define_scale_from_example "Blues", %w(e g a a# b d)
+  define_scale_from_example "SuspendedPentatonic", %w(c d f g a#)
+  define_scale_from_example "Sakura", %w(c c# f g g#)
+  define_scale_from_intervals "Insen", %w(d d# g a c)
+  define_scale_from_intervals "Iwato", %w(c c# f f# a#)
+
 
   p Scale.circle("c", 7) and exit(0) if ARGV[0].nil?
   current_key = ARGV[0].downcase
@@ -45,5 +50,6 @@ if $PROGRAM_NAME == __FILE__
     n = ARGV[2].size
     chords = ARGV[2][1...n-1].split(",")
   end
-  p s.chords(*chords,triads: true)
+  chords = s.chords(*chords,triads: true)
+  chords.each{pp _1}
 end
