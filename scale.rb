@@ -53,7 +53,23 @@ class Scale
   end
 
   def chords(*degrees, triads: false)
-    degrees = [1,2,3,4,5,6,7] if degrees.empty?
+    degrees = begin 
+      if degrees.empty?
+        [1,2,3,4,5,6,7]
+      else
+        map_to_romans = {
+          "i": 1,
+          "ii": 2,
+          "iii": 3,
+          "iv": 4,
+          "v": 5,
+          "vi": 6,
+          "vii": 7
+        }
+        degrees.map{map_to_romans[_1.to_sym]}.compact
+      end
+    end
+    
     formulas = [
         [4,3],
         [3,4],
@@ -69,7 +85,6 @@ class Scale
         [4,4,3]
     ]
     formulas.select!{_1.size == 2} if triads == true
-
     degrees.map do |degree|
       ch = []
       i = degree-1

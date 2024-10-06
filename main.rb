@@ -32,14 +32,18 @@ if $PROGRAM_NAME == __FILE__
       break
     end
   end
-  raise "-- usage <note> <#{flags.keys.join("|")}>" if ARGV[1].nil?
+  raise "-- usage <note> <#{flags.keys.join("|")}> (<degrees separated by commas>)" if ARGV[1].nil?
   mode = ARGV[1].downcase
-  raise InvalidScaleError, "-- usage <note> <#{flags.keys.join("|")}>" unless flags.has_key?(mode)
+  raise InvalidScaleError, "-- usage <note> <#{flags.keys.join("|")}> (<degrees separated by commas>)" unless flags.has_key?(mode)
   s = flags[mode].new(current_key)
   puts "---scale---"
   puts flags[mode]
   puts "---notes---"
   p s.notes
   puts "---chords---"
-  p s.chords(triads: true)
+  if !ARGV[2].nil? && ARGV[2].start_with?("(") && ARGV[2].end_with?(")")
+    n = ARGV[2].size
+    chords = ARGV[2][1...n-1].split(",")
+  end
+  p s.chords(*chords,triads: true)
 end
