@@ -1,3 +1,5 @@
+
+
 class Scale
   def self.inherited(subclass)
     @descendants ||= []

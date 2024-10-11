@@ -1,0 +1,25 @@
+#!/usr/bin/env ruby
+require_relative "errors"
+require_relative "scales"
+require_relative "guitar_tool"
+
+if $PROGRAM_NAME == __FILE__
+  exit(-1) if ARGV[0].nil?
+  current_key = ARGV[0].downcase
+  #generate flags from class names
+  raise "-- usage <note> <#{all_scales.keys.join("|")}> (<strings>)" if ARGV[1].nil?
+  mode = ARGV[1].downcase
+  raise InvalidScaleError, "-- usage <note> <#{all_scales.keys.join("|")}> (<strings>)" unless all_scales.has_key?(mode)
+  s = all_scales[mode].new(current_key)
+  puts "---scale---"
+  puts all_scales[mode]
+  puts "---notes---"
+  p s.notes
+  if !ARGV[2].nil? && ARGV[2].start_with?("(") && ARGV[2].end_with?(")")
+    n = ARGV[2].size
+    strings = ARGV[2][1...n-1].split(" ")
+  end
+  puts "---frets---"
+  g = GuitarTool.new(19)
+  pp g.notes_to_frets(all_scales[mode].new(current_key), strings: strings)
+end
