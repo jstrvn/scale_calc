@@ -1,8 +1,11 @@
 #!/usr/bin/env ruby
-require_relative "errors"
-require_relative "scale_builder"
-require_relative "scale"
-require_relative "guitar_tool"
+require 'bundler'
+Bundler.require
+
+require_relative "../errors"
+require_relative "../scale_builder"
+require_relative "../scale"
+require_relative "../guitar_tool"
 
 if $PROGRAM_NAME == __FILE__
   p Scale.circle("c", 7) and exit(0) if ARGV[0].nil?

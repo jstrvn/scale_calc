@@ -16,8 +16,10 @@ define_scale_from_example "Phrygian", %w(a a# c d e f g)
 define_scale_from_example "Blues", %w(e g a a# b d)
 define_scale_from_example "SuspendedPentatonic", %w(c d f g a#)
 define_scale_from_example "Sakura", %w(c c# f g g#)
-define_scale_from_intervals "Insen", %w(d d# g a c)
-define_scale_from_intervals "Iwato", %w(c c# f f# a#)
+define_scale_from_example "Insen", %w(d d# g a c)
+define_scale_from_example "Iwato", %w(c c# f f# a#)
+define_scale_from_example "Japanese", %w(a b c e f)
+define_scale_from_example "Yo", %w(d e g a b)
 
 def all_scales
     flags = {}

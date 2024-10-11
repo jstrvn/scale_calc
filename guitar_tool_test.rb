@@ -1,10 +1,3 @@
-require "bundler/inline"
-
-gemfile(true) do
-    source "https://rubygems.org"
-    gem "minitest"
-end
-
 require 'minitest/autorun'
 require_relative "guitar_tool"
 require_relative "scale"

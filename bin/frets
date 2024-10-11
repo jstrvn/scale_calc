@@ -1,7 +1,10 @@
 #!/usr/bin/env ruby
-require_relative "errors"
-require_relative "scales"
-require_relative "guitar_tool"
+require 'bundler'
+Bundler.require
+
+require_relative "../errors"
+require_relative "../scales"
+require_relative "../guitar_tool"
 
 if $PROGRAM_NAME == __FILE__
   exit(-1) if ARGV[0].nil?
