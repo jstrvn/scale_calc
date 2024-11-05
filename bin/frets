@@ -2,27 +2,70 @@
 require 'bundler'
 Bundler.require
 
+require 'optparse'
 require_relative "../errors"
 require_relative "../scales"
 require_relative "../guitar_tool"
 
 if $PROGRAM_NAME == __FILE__
-  exit(-1) if ARGV[0].nil?
-  current_key = ARGV[0].downcase
+  options = {
+    scale: "m",
+    key: "c",
+    lower_fret: 0,
+    upper_fret: 19,
+    strings: "oooooo",
+    frets: 19
+  }  
+  OptionParser.new do |opts|
+    opts.banner = "Usage: ./frets [options]"
+
+    opts.on("-sScale", "--scale=SCALE", "Use scale") do |s|
+      options[:scale] = s
+    end
+
+    opts.on("-kKEY", "--key=KEY", "Use key") do |k|
+      options[:key] = k
+    end
+
+    opts.on("-lLOWER_FRET", "--lower-fret=LOWER_FRET", "Lower fret") do |lf|
+      options[:lower_fret] = lf.to_i
+    end
+
+    opts.on("-uUPPER_FRET", "--upper-fret=UPPER_FRET", "Upper fret") do |uf|
+      options[:upper_fret] = uf.to_i
+    end
+
+    opts.on("-tSTRINGS", "--string=STRINGS", "String") do |strings|
+      options[:strings] = strings
+    end
+
+    opts.on("-fFRETS", "--frets=FRETS", "Frets") do |frets|
+      options[:frets] = frets.to_i
+    end
+  end.parse!
+
+  pp options 
+
+  current_key = options[:key].downcase
   #generate flags from class names
-  raise "-- usage <note> <#{all_scales.keys.join("|")}> (<strings>)" if ARGV[1].nil?
-  mode = ARGV[1].downcase
-  raise InvalidScaleError, "-- usage <note> <#{all_scales.keys.join("|")}> (<strings>)" unless all_scales.has_key?(mode)
+  mode = options[:scale].downcase
   s = all_scales[mode].new(current_key)
   puts "---scale---"
   puts all_scales[mode]
   puts "---notes---"
   p s.notes
-  if !ARGV[2].nil? && ARGV[2].start_with?("(") && ARGV[2].end_with?(")")
-    n = ARGV[2].size
-    strings = ARGV[2][1...n-1].split(" ")
-  end
   puts "---frets---"
-  g = GuitarTool.new(19)
-  pp g.notes_to_frets(all_scales[mode].new(current_key), strings: strings)
+  g = GuitarTool.new(options[:frets])
+
+  strings = []
+  options[:strings].each_char{strings << _1}
+
+  lower_fret = options[:lower_fret] || 0
+  upper_fret = options[:upper_fret] || options[:frets]
+  fretted_notes = g.notes_to_frets(all_scales[mode].new(current_key), strings: strings)
+  fretted_notes.map do |s|
+    s.select{_1.dig(:fret) >= lower_fret && _1.dig(:fret) <= upper_fret}.map{_1.dig(:fret)}
+  end.each do |s|
+    pp s
+  end
 end
