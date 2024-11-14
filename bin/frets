@@ -62,10 +62,5 @@ if $PROGRAM_NAME == __FILE__
 
   lower_fret = options[:lower_fret] || 0
   upper_fret = options[:upper_fret] || options[:frets]
-  fretted_notes = g.notes_to_frets(all_scales[mode].new(current_key), strings: strings)
-  fretted_notes.map do |s|
-    s.select{_1.dig(:fret) >= lower_fret && _1.dig(:fret) <= upper_fret}.map{_1.dig(:fret)}
-  end.each do |s|
-    pp s
-  end
+  pp g.frets_list_for_scale(all_scales[mode].new(current_key).notes, strings:, lower_fret:, upper_fret:)
 end

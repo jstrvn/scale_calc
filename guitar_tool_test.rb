@@ -1,7 +1,5 @@
 require 'minitest/autorun'
 require_relative "guitar_tool"
-require_relative "scale"
-require_relative "scale_builder"
 
 class GuitarToolTest < Minitest::Test
   def test_notes_to_frets_first_string
@@ -22,12 +20,16 @@ class GuitarToolTest < Minitest::Test
     assert_equal [0, 1, 3, 5, 7, 8, 10, 12, 13, 15, 17], n.first.map{|e| e[:fret]}
   end
 
-
-  def test_notes_from_scale_to_frets
-    self.extend(ScaleBuilder)
-    define_scale_from_intervals "Major", [2,2,1,2,2,2,1]
+  def test_bounds_for_frets_lists_root_position
     g = GuitarTool.new(19, %w(e a d g b e))
-    n = g.notes_to_frets(MajorScale)
-    assert_equal [0, 1, 3, 5, 7, 8, 10, 12, 13, 15, 17], n.first.map{|e| e[:fret]}
+    fr = g.frets_list_for_scale(%w(c d e f g a b), strings: %w(o o o o o o), lower_fret: 0, upper_fret: 4)
+    assert_equal [[0, 1, 3], [0, 2, 3], [0, 2, 3], [0, 2], [0, 1, 3], [0, 1, 3]], fr
   end
+
+  def test_bounds_for_frets_lists_seven_position
+    g = GuitarTool.new(19, %w(e a d g b e))
+    fr = g.frets_list_for_scale(%w(c d e f g a b), strings: %w(o o o o o o), lower_fret: 7, upper_fret: 10)
+    assert_equal [[7, 8, 10], [7, 8, 10], [7, 9, 10], [7, 9, 10], [8, 10], [7, 8, 10]], fr
+  end
+
 end
